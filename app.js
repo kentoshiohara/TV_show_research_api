@@ -1,10 +1,17 @@
 const form = document.querySelector('#searchForm');
-const input = document.querySelector('#input');
+
 form.addEventListener('submit', async function(e) {
     e.preventDefault();
-    const res = await axios.get(`https://api.tvmaze.com/search/shows?q=${input.value}`);
-    console.log(res);
+    clearImages();
+    const input = document.querySelector('#input');
+    const config = {
+        params: {
+            q: input.value
+        }
+    }
+    const res = await axios.get('https://api.tvmaze.com/search/shows', config);
     makeImages(res.data);
+    input.value = '';
 })
 
 const makeImages = (results) => {
@@ -15,4 +22,11 @@ const makeImages = (results) => {
             document.body.append(img);
         }
     }
+}
+
+const clearImages = () => {
+    const images = document.querySelectorAll('img');
+    images.forEach(image => {
+        image.remove();
+    })
 }
